@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <tr>
+        {% for column in columns %}
+        <th> {{ column }}</th>
+        {% endfor %}
+    </tr>
+    {% for row in all_tests %}
+    <tr>
+        {% for field, cell in row.fields.items %}
+        <td>
+            {{ cell }}
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+<button>
+    Начать тестирование
+</button>
+</body>
+</html>
