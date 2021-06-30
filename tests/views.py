@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from django.core import serializers
 from tests.models import TestInfo
 
@@ -9,3 +9,7 @@ def start_page(request):
                            if field.verbose_name != ''],
                'test_string': 'test'}
     return render(request, 'tests/start_page.html', context=context)
+
+
+def start_test(request):
+    return render(request, 'tests/test.html', context={'id': request.POST.get('test-id')})
