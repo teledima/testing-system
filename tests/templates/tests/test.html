@@ -5,6 +5,13 @@
     <title>Title</title>
 </head>
 <body>
-Here will be test with id={{ id }}
+{{ question.question_text }}
+
+{% for answer in answers %}
+    <div>
+        {{ answer|safe }}
+    </div>
+{% endfor %}
+
 </body>
 </html>
