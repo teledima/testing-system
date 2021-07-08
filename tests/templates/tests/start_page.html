@@ -3,26 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tests/main_page.css' %}">
+    <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script defer type="text/javascript" src="{% static 'tests/main_page.js' %}"></script>
 </head>
 <body>
-<table>
-    <tr>
+<table id="all-tests">
+    <tr class="table-head">
         {% for column in columns %}
         <th> {{ column }}</th>
         {% endfor %}
     </tr>
     {% for row in all_tests %}
-    <tr>
+    <tr data-id="{{ row.pk }}">
         {% for field, cell in row.fields.items %}
-        <td>
-            {{ cell }}
-        </td>
+        <td> {{ cell }} </td>
         {% endfor %}
     </tr>
     {% endfor %}
 </table>
-<button>
-    Начать тестирование
-</button>
+
+<form method="post" action="{% url 'tests:start_test' %}" id="start-testing">
+    {% csrf_token %}
+    <input type="submit" value="Начать тестирование" disabled>
+</form>
+
 </body>
 </html>
