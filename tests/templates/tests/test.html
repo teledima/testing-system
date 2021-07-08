@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    {% load static %}
+    <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script defer type="text/javascript" src="{% static 'tests/test.js' %}"></script>
 </head>
 <body>
+<div id="timer" data-time="{{ time_to_solve }}">  </div>
 {{ question.question_text }}
 
 {% for answer in answers %}
