@@ -15,10 +15,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from tests import views
+from django.core import serializers
+from django.shortcuts import render
+from tests import models
+
+
+def default(request):
+    return render(request, 'default.html')
+
+
+def home(request):
+    context = {'all_tests': serializers.serialize('python', models.TestInfo.objects.all()),
+               'columns': [field.verbose_name for field in models.TestInfo._meta.get_fields()
+                           if hasattr(field, 'verbose_name') and field.verbose_name != ''],
+               'test_string': 'test'}
+    return render(request, 'tests/start_page.html', context=context)
+
 
 urlpatterns = [
-    path('', views.start_page),
+    path('', default, name='default'),
+    path('home/', home, name='start_page'),
     path('admin/', admin.site.urls),
     path('tests/', include(('tests.urls', 'tests'), namespace='tests'))
 ]
