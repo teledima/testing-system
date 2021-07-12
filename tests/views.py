@@ -1,7 +1,9 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from tests.models import TestInfo
 
 
+@login_required(login_url='/login/')
 def start_test(request):
     test = TestInfo.objects.get(pk=request.POST.get('test-id'))
     first_question = test.questions.first()
