@@ -14,6 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.decorators import login_required
 from django.urls import path, include
 from django.core import serializers
 from django.shortcuts import render
@@ -24,6 +26,7 @@ def default(request):
     return render(request, 'default.html')
 
 
+@login_required(login_url='/login/')
 def home(request):
     context = {'all_tests': serializers.serialize('python', models.TestInfo.objects.all()),
                'columns': [field.verbose_name for field in models.TestInfo._meta.get_fields()
@@ -36,5 +39,6 @@ urlpatterns = [
     path('', default, name='default'),
     path('home/', home, name='start_page'),
     path('admin/', admin.site.urls),
-    path('tests/', include(('tests.urls', 'tests'), namespace='tests'))
+    path('tests/', include(('tests.urls', 'tests'), namespace='tests')),
+    path('login/', LoginView.as_view(), name='login')
 ]
