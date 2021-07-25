@@ -24,7 +24,7 @@
     {% endfor %}
 </table>
 
-<form method="post" action="{% url 'tests:start_test' %}" id="start-testing">
+<form method="post" action="{% url 'tests:action' %}" id="start-testing">
     {% csrf_token %}
     <input type="submit" value="Начать тестирование" disabled>
 </form>

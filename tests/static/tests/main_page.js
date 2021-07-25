@@ -19,4 +19,10 @@ $('#start-testing').on('submit', function(e) {
         name: 'test-id',
         value: $('#all-tests tr.selected').data('id')
     }).appendTo('#start-testing');
+
+    $('<input>').attr({
+        type: 'hidden',
+        name: 'action-type',
+        value: 'start'
+    }).appendTo('#start-testing');
 });

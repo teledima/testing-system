@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <title>Title</title>
     {% load static %}
-    <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script defer type="text/javascript" src="{% static 'tests/test.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'tests/test.js' %}"></script>
+
 </head>
 <body>
 <div id="timer" data-time="{{ time_to_solve }}">  </div>
-{{ question.question_text }}
+{{ question_text }}
 
 {% for answer in answers %}
     <div>
@@ -17,5 +18,46 @@
     </div>
 {% endfor %}
 
+<form method="post" action="{% url 'tests:action' %}" id="next-question">
+    {% if has_next %} {% csrf_token %} {% endif %}
+    <input type="submit" value="Следующий вопрос" {% if not has_next %} disabled {% endif %} >
+</form>
+
+<form method="post" action="{% url 'tests:action' %}" id="prev-question">
+    {% if has_prev %} {% csrf_token %} {% endif %}
+    <input type="submit" value="Предыдущий вопрос" {% if not has_prev %} disabled {% endif %} >
+</form>
+{% if has_prev %}
+<script type="text/javascript">
+    $('#prev-question').on('submit', function(e) {
+        $('<input>').attr({
+            type: 'hidden',
+            name: 'action-type',
+            value: 'prev'
+        }).appendTo('#prev-question');
+        $('<input>').attr({
+            type: 'hidden',
+            name: 'available-time',
+            value: $('#timer').data('time')
+        }).appendTo('#prev-question');
+    });
+</script>
+{% endif %}
+{% if has_next %}
+<script type="text/javascript">
+    $('#next-question').on('submit', function(e) {
+        $('<input>').attr({
+            type: 'hidden',
+            name: 'action-type',
+            value: 'next'
+        }).appendTo('#next-question');
+    $('<input>').attr({
+            type: 'hidden',
+            name: 'available-time',
+            value: $('#timer').data('time')
+        }).appendTo('#next-question');
+    });
+</script>
+{% endif %}
 </body>
 </html>
