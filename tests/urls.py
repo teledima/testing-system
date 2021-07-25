@@ -1,6 +1,7 @@
-from django.urls import path, include
+from django.urls import path
 from tests import views
 
 urlpatterns = [
-    path('', views.start_test, name='start_test')
+    path('', views.testing, name='testing'),
+    path('action', views.test_action, name='action')
 ]

@@ -10,7 +10,6 @@ class TestInfo(models.Model):
     creator = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True,
                                 verbose_name='Составитель теста', to_field='username')
     time_to_solve = models.PositiveIntegerField(verbose_name='Время для решения', null=True)
-    questions = models.ManyToManyField(to='QuestionInfo', through='TestQuestion')
 
     class Meta:
         db_table = 'tests_info'
@@ -22,9 +21,12 @@ class QuestionInfo(models.Model):
     id = models.AutoField(primary_key=True)
     question_text = models.CharField(max_length=4000, verbose_name='Текст вопроса')
     question_type = models.ForeignKey(to='QuestionType', on_delete=models.CASCADE)
+    test = models.ForeignKey(to='TestInfo', on_delete=models.CASCADE, null=False)
+    ord = models.IntegerField(verbose_name=_('Order questions'), db_index=True, default=1)
 
     class Meta:
         db_table = 'questions_info'
+        ordering = ['ord']
         verbose_name = 'Question info'
         verbose_name_plural = 'Questions info'
 
@@ -38,16 +40,6 @@ class QuestionType(models.Model):
         db_table = 'question_types'
         verbose_name = 'Question Type'
         verbose_name_plural = 'Question types'
-
-
-class TestQuestion(models.Model):
-    test = models.ForeignKey(to=TestInfo, on_delete=models.CASCADE)
-    question = models.ForeignKey(to=QuestionInfo, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'tests_questions'
-        verbose_name = 'Question in test'
-        verbose_name_plural = 'Questions in test'
 
 
 class QuestionAnswer(models.Model):
