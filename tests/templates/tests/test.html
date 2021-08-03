@@ -5,7 +5,7 @@
     <title>Title</title>
     {% load static %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="{% static 'tests/test.js' %}"></script>
+    <script defer type="text/javascript" src="{% static 'tests/test.js' %}"></script>
 
 </head>
 <body>
@@ -32,22 +32,6 @@
         else if (types_manual.includes('{{ question.question_type }}'))
             $('textarea').prop('value', '{{ answer }}');
     {% endfor %}
-</script>
-
-<script>
-    $("input[type='submit']").on('click', function(e) {
-        $('<input>').attr({
-                type: 'hidden',
-                name: 'available-time',
-                value: $('#timer').data('time')
-            }).appendTo('form');
-
-        $('<input>').attr({
-            type: 'hidden',
-            name: 'action-type',
-            value: $(this).prop('id')
-        }).appendTo('form');
-    });
 </script>
 </body>
 </html>
