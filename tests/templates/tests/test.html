@@ -10,54 +10,44 @@
 </head>
 <body>
 <div id="timer" data-time="{{ time_to_solve }}">  </div>
-{{ question_text }}
+{{ question.question_text }}
 
-{% for answer in answers %}
+<form method="post" action="{% url 'tests:action' %}" id="control_form">
+    {% csrf_token %}
+    {% for answer in answers %}
     <div>
         {{ answer|safe }}
     </div>
-{% endfor %}
-
-<form method="post" action="{% url 'tests:action' %}" id="next-question">
-    {% if has_next %} {% csrf_token %} {% endif %}
-    <input type="submit" value="Следующий вопрос" {% if not has_next %} disabled {% endif %} >
+    {% endfor %}
+    <input type="submit" id="prev" value="Предыдущий вопрос" {% if not has_prev %} disabled {% endif %} >
+    <input type="submit" id="next" value="Следующий вопрос" {% if not has_next %} disabled {% endif %} >
 </form>
 
-<form method="post" action="{% url 'tests:action' %}" id="prev-question">
-    {% if has_prev %} {% csrf_token %} {% endif %}
-    <input type="submit" value="Предыдущий вопрос" {% if not has_prev %} disabled {% endif %} >
-</form>
-{% if has_prev %}
-<script type="text/javascript">
-    $('#prev-question').on('submit', function(e) {
+<script>
+    const types_check = ['ONE', 'SEVERAL'];
+    const types_manual = ['MANUAL'];
+    {% for answer in temp_answers %}
+        if (types_check.includes('{{ question.question_type }}'))
+            $('#{{ answer }}').prop('checked', true);
+        else if (types_manual.includes('{{ question.question_type }}'))
+            $('textarea').prop('value', '{{ answer }}');
+    {% endfor %}
+</script>
+
+<script>
+    $("input[type='submit']").on('click', function(e) {
+        $('<input>').attr({
+                type: 'hidden',
+                name: 'available-time',
+                value: $('#timer').data('time')
+            }).appendTo('form');
+
         $('<input>').attr({
             type: 'hidden',
             name: 'action-type',
-            value: 'prev'
-        }).appendTo('#prev-question');
-        $('<input>').attr({
-            type: 'hidden',
-            name: 'available-time',
-            value: $('#timer').data('time')
-        }).appendTo('#prev-question');
+            value: $(this).prop('id')
+        }).appendTo('form');
     });
 </script>
-{% endif %}
-{% if has_next %}
-<script type="text/javascript">
-    $('#next-question').on('submit', function(e) {
-        $('<input>').attr({
-            type: 'hidden',
-            name: 'action-type',
-            value: 'next'
-        }).appendTo('#next-question');
-    $('<input>').attr({
-            type: 'hidden',
-            name: 'available-time',
-            value: $('#timer').data('time')
-        }).appendTo('#next-question');
-    });
-</script>
-{% endif %}
 </body>
 </html>
