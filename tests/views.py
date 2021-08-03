@@ -16,11 +16,13 @@ def testing(request):
 def test_action(request):
     def temp_save():
         selected_answer = [request.POST.getlist(key) for key in request.POST if 'ANSWER' in key]
+        temp_answers = request.session['temp_answers']
         if len(selected_answer) == 0:
+            if str(request.session['question']['id']) in temp_answers:
+                temp_answers[str(request.session['question']['id'])] = None
             return
         assert len(selected_answer) == 1
         request.session.setdefault('temp_answers', dict())
-        temp_answers = request.session['temp_answers']
         temp_answers[str(request.session['question']['id'])] = selected_answer[0]
 
     action_type = request.POST.get('action-type')
