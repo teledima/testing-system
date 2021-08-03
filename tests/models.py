@@ -45,7 +45,7 @@ class QuestionType(models.Model):
 class QuestionAnswer(models.Model):
     question = models.ForeignKey(to=QuestionInfo, on_delete=models.CASCADE)
     answer_text = models.CharField(max_length=255, verbose_name='Вариант ответа')
-    is_correct = models.PositiveIntegerField(verbose_name='Правильность ответа')
+    is_correct = models.PositiveIntegerField(null=True, verbose_name='Правильность ответа')
 
     class Meta:
         db_table = 'questions_answers'
