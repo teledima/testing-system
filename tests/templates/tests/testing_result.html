@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Результаты тестирования</title>
+</head>
+<body>
+{{ result_block|safe }}
+<form method="get" id="return_to_home" action="{% url 'start_page' %}">
+    {% csrf_token %}
+    <input type="submit" value="Вернуться к списку тестов">
+</form>
+</body>
+</html>
