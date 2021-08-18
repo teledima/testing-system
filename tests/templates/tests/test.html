@@ -16,7 +16,7 @@
         window.location.replace('{% url 'start_page' %}');
     {% endif %}
 </script>
-<div id="timer" data-time="{{ 15 }}">  </div>
+<div id="timer" data-time="{{ time_to_solve }}">  </div>
 {{ question.question_text }}
 
 <form method="post" action="{% url 'tests:action' %}" id="control_form">
