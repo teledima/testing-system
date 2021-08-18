@@ -5,11 +5,18 @@
     <title>Title</title>
     {% load static %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script defer type="text/javascript" src="{% static 'tests/test.js' %}"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" />
 
 </head>
 <body>
-<div id="timer" data-time="{{ time_to_solve }}">  </div>
+<script>
+    {% if not question %}
+        window.location.replace('{% url 'start_page' %}');
+    {% endif %}
+</script>
+<div id="timer" data-time="{{ 15 }}">  </div>
 {{ question.question_text }}
 
 <form method="post" action="{% url 'tests:action' %}" id="control_form">
@@ -21,7 +28,16 @@
     {% endfor %}
     <input type="submit" id="prev" value="Предыдущий вопрос" {% if not has_prev %} disabled {% endif %} >
     <input type="submit" id="next" value="Следующий вопрос" {% if not has_next %} disabled {% endif %} >
+    <input type="submit" id="finish" value="Закончить тестирование">
 </form>
+
+<div id="confirm-finish" title="Завершить тестирование" hidden>
+    <p>Вы уверены, что хотите завершить тестирование?</p>
+</div>
+
+<div id="time-ended" title="Истекло время" hidden>
+    <p>Время тестирования истекло</p>
+</div>
 
 <script>
     const types_check = ['ONE', 'SEVERAL'];
